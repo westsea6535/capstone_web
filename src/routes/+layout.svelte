@@ -2,24 +2,26 @@
   import '$lib/style/global.css';
   import { page } from '$app/stores';
   $: currentFirstRoute = $page.url.pathname.split('/')[1];
+  console.log(currentFirstRoute);
 </script>
 
-<div id="pcWrap">
-</div>
+<div id="pcWrap"></div>
 <div id="mobileWrap">
   <div id="slotWrap">
     <slot></slot>
   </div>
-  <div id="mobileBottomNav">
-    {#each ['home', 'filter', 'upload', 'like', 'myPage',] as menuTitle}
-      <a href={`/${menuTitle === 'home' ? '' : menuTitle}`}>
-        <div class={`
-          bottomNavBtn 
-          ${currentFirstRoute === menuTitle ? 'currentPage' : ''}
-        `}>{menuTitle}</div>
-      </a>
-    {/each}
-  </div>
+  {#if !currentFirstRoute || ['filter'].indexOf(currentFirstRoute)}
+    <div id="mobileBottomNav">
+      {#each ['home', 'filter', 'upload', 'like', 'myPage',] as menuTitle}
+        <a href={`/${menuTitle === 'home' ? '' : menuTitle}`}>
+          <div class={`
+            bottomNavBtn 
+            ${currentFirstRoute === menuTitle ? 'currentPage' : ''}
+          `}>{menuTitle}</div>
+        </a>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -39,6 +41,9 @@
     width: 400px;
     height: 100%;
     background-color: white; 
+  }
+  #slotWrap {
+    width: 100%;
   }
   #mobileBottomNav {
     display: flex;
