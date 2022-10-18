@@ -69,9 +69,14 @@
       <div id="logo1">로고</div>
     </div>
     <div id="goodsListWrap">
-      {#each testDatas as testData}
-        <SingleGoods goodsData={testData}></SingleGoods>
-      {/each}
+      <div id="recentGoodsTitle">
+        최근 등록된 상품
+      </div>
+      <div id="recentGoodsList">
+        {#each testDatas as testData}
+          <SingleGoods goodsData={testData}></SingleGoods>
+        {/each}
+      </div>
     </div>
   </div>
 </div>
@@ -105,7 +110,7 @@
     background-color: #ddffff;
   }
 
-  #goodsListWrap {
+  #recentGoodsList {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;

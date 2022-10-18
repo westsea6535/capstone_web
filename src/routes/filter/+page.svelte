@@ -1,5 +1,10 @@
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <script>
+  import { goto, afterNavigate } from '$app/navigation';
+  import { base } from '$app/paths';
+    import { query_selector_all } from 'svelte/internal';
+
+
+
 
 
   const idolAllInfo = {
@@ -24,13 +29,37 @@
   let selectedIdol = '';
   let selectedMember = '';
   let selectedTypes = '';
+  let previousPage = base;
+  let scrollY = 0;
+  let beforeScrollY = 0;
+  $: scrollDirectionBottom = findScroll(scrollY);
+
+  const findScroll = (y) => {
+    if (y < beforeScrollY) {
+      console.log('scroll');
+      beforeScrollY = y;
+      return true;
+    } else if (y > beforeScrollY) {
+      beforeScrollY = y;
+      return false;
+    }
+  }
+
+  afterNavigate(({ from }) => {
+    previousPage = from?.url.pathname || previousPage;
+  })
 </script>
+<svelte:window bind:scrollY={scrollY} />
+
 <div id="wrap">
   <div id="filterHeader">
     {#if currentFilter === 'idol'}
-      <a id="returnBtn" 
-        href='/'
-      >{`<`}</a>
+      <div id="returnBtn" 
+        on:click={() => {
+          console.log(previousPage);
+          goto(previousPage);
+          }}
+      >{`<`}</div>
     {:else}
       <div id="returnBtn" 
         on:click={() => {
@@ -82,11 +111,18 @@
   {:else if currentFilter === 'photoCard'}
     <div id="cardsFilter">
       {#each Array(20) as cardInfo, index}
-        <div class="cardsImgWrap">
+        <div class="cardsImgWrap" 
+          on:click={(e) => {
+            e.target.parentNode.querySelector('.cardsImg').style.backgroundColor === 'gray' ? e.target.parentNode.querySelector('.cardsImg').style.backgroundColor = 'white' : e.target.parentNode.querySelector('.cardsImg').style.backgroundColor = 'gray';
+            console.log(e.target.parentNode.querySelector('.cardsImg').style.backgroundColor);
+          }}>
           <div class="cardsImg">{`card${index}`}</div>
           <div class="cardsName">{`card${index}`}</div>
         </div>
       {/each}
+      <div id="cardSearchNav" class:hideDiv={scrollDirectionBottom}>
+        검색하기
+      </div>
     </div>
   {/if}
 </div>
@@ -96,12 +132,12 @@
     position: relative;
   }
   #filterHeader {
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 10px 20px;
     position: fixed;
     top: 0;
-    right: calc(50vw - 50%);
     background-color: white; 
   }
   #returnBtn {
@@ -114,6 +150,7 @@
     gap: 15px;
     padding: 10px;
     padding-top: 65px;
+    overflow: scroll;
   }
   .idolImgWrap, .memberImgWrap, .typesImgWrap, .cardsImgWrap {
     display: flex;
@@ -130,9 +167,24 @@
     border: 1px solid greenyellow;
     box-sizing: border-box;
     border-radius: 50%;
-
   }
   .cardsImg {
     border-radius: 4px;
+    background-color: white;
+  }
+  #cardSearchNav {
+    width: 100%;
+    height: 10vh;
+    max-height: 50px;
+    min-height: 40px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(149, 255, 92, 1); 
+    transition: transform 0.3s linear;
+    transform: translateY(0%);
+  }
+  .hideDiv {
+    transform: translateY(100%) !important;
   }
 </style>
