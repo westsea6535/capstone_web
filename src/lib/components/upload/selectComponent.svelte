@@ -33,6 +33,8 @@
   </div>
 
 <style>
+  #componentBody {
+  }
   #componentFooter {
     position: absolute;
     bottom: 0;

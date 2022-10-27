@@ -48,7 +48,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    padding: 10px;
+    padding: 0 10px 10px;
     overflow: scroll;
   }
   .cardsImgWrap {
