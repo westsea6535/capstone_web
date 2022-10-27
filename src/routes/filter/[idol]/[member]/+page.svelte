@@ -1,21 +1,24 @@
 <script>
-  import { goto, afterNavigate } from '$app/navigation';
   import { idolAllInfo } from '$lib/stores.js';
+  export let data;
+
+  const typesList = idolAllInfo[data.selectedIdol].types;
 
 </script>
 
-<div id="idolFilter">
-  {#each Object.entries(idolAllInfo) as [idolName, idolInfo]}
-    <a class='idolImgWrap'
-      href={`/filter/${idolName}`}>
-      <div class="idolImg">{idolInfo.name}</div>
-      <div class="idolName">{idolInfo.name}</div>
+<div id="typesFilter">
+  {#each typesList as type}
+    <a class='typesImgWrap'
+      href={`/filter/${data.selectedIdol}/${data.selectedMember}/${type}`}>
+      <div class="typesImg">{type}</div>
+      <div class="typesName">{type}</div>
     </a>
   {/each}
 </div>
 
+
 <style>
-  #idolFilter {
+  #typesFilter {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
@@ -23,13 +26,13 @@
     padding-top: 65px;
     overflow: scroll;
   }
-  .idolImgWrap {
+  .typesImgWrap {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .idolImg {
+  .typesImg {
     width: 100%; 
     aspect-ratio: 1 / 1;
     display: flex;

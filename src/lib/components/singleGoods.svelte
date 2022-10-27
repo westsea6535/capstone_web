@@ -6,10 +6,12 @@
   <img src={goodsData.imageUrl} alt="loading...">
   <div id="goodsInfo">
     <div id="goodsPrice">
-      {`${goodsData.price}원`}
+      {`${goodsData.price} 원`}
     </div>
     <div id="goodsTitle">
       {goodsData.title}
+    </div>
+    <div id="goodsDate">
     </div>
   </div>
 </div>
@@ -28,5 +30,9 @@
   }
   #goodsTitle {
     font-size: 12px;
+  }
+  #goodsPrice {
+    font-weight: bold;
+    padding: 5px 0;
   }
 </style>

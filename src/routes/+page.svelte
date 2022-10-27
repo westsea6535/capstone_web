@@ -1,5 +1,7 @@
 <script>
   import SingleGoods from "$lib/components/singleGoods.svelte";
+  import BottomNav from "$lib/components/bottomNav.svelte";
+  import UploadNav from "$lib/components/uploadNav.svelte";
 
   const testDatas = [
     {
@@ -61,9 +63,7 @@
 </script>
 
 <div id="wrap">
-  <div id="pageHeader">
-    
-  </div>
+  <div id="pageHeader"></div>
   <div id="pageMain">
     <div id="homeLogo">
       <div id="logo1">로고</div>
@@ -79,6 +79,8 @@
       </div>
     </div>
   </div>
+  <BottomNav />
+  <UploadNav />
 </div>
 
 <style>
@@ -86,14 +88,16 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
   }
   #pageHeader {
-    height: 80px;
-    width: 100%;
+    min-height: 80px;
+    width: 100vw;
     background-color: #ccffff;
   }
   #pageMain {
-    height: 100%;
     background-color: white;
     margin-bottom: 10vh;
   }

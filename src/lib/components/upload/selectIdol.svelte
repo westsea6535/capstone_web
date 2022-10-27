@@ -1,26 +1,30 @@
 <script>
-  import { goto, afterNavigate } from '$app/navigation';
-  import { idolAllInfo } from '$lib/stores.js';
-
+  import { openedSelectComponent, idolAllInfo } from '$lib/stores';
 </script>
 
-<div id="idolFilter">
+<div id="idolSelect">
   {#each Object.entries(idolAllInfo) as [idolName, idolInfo]}
-    <a class='idolImgWrap'
-      href={`/filter/${idolName}`}>
+    <div class='idolImgWrap'
+      on:click={() => {
+        openedSelectComponent.update(n => {
+          let returnArr = [...n];
+          returnArr.push(idolName);
+          return returnArr;
+        });
+        window.history.pushState({}, '');
+      }}>
       <div class="idolImg">{idolInfo.name}</div>
       <div class="idolName">{idolInfo.name}</div>
-    </a>
+    </div>
   {/each}
 </div>
 
 <style>
-  #idolFilter {
+  #idolSelect {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 10px;
     padding: 10px;
-    padding-top: 65px;
     overflow: scroll;
   }
   .idolImgWrap {
@@ -38,5 +42,6 @@
     border: 1px solid greenyellow;
     box-sizing: border-box;
     border-radius: 50%;
+    background-color: white;
   }
 </style>
