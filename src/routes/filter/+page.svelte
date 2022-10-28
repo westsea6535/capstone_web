@@ -1,5 +1,4 @@
 <script>
-  import { goto, afterNavigate } from '$app/navigation';
   import { idolAllInfo } from '$lib/stores.js';
 
 </script>

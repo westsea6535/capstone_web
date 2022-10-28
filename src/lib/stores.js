@@ -8,8 +8,8 @@ export const idolAllInfo = {
   },
   'ITZY' : {
     name: 'ITZY',
-    member: ['LIA', 'Yeji', 'Yuna',],
-    types: ['album1', 'album2', 'album3',],
+    member: ['LIA', 'Yeji', 'Yuna', 'Ryujin', 'Chaeryung'],
+    types: ['digital_single_1st', 'mini_first', 'mini_second', 'mini_third', 'digital_single_2nd', 'mini_firth', 'regular_1st', 'mini_5th'],
   },
   'StrayKids' : {
     name: 'StrayKids',
