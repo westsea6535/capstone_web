@@ -3,6 +3,10 @@
   import BottomNav from "$lib/components/bottomNav.svelte";
   import UploadNav from "$lib/components/uploadNav.svelte";
 
+  export let data;
+  let {allGoodsData} = data;
+  console.log(allGoodsData);
+
   const testDatas = [
     {
       title: 'ITZY 있지믿지날자 팬미팅 수료증양도(가격인하)',
@@ -73,8 +77,11 @@
         최근 등록된 상품
       </div>
       <div id="recentGoodsList">
-        {#each testDatas as testData}
+        <!-- {#each testDatas as testData}
           <SingleGoods goodsData={testData}></SingleGoods>
+        {/each} -->
+        {#each allGoodsData as goodsData}
+          <SingleGoods goodsData={goodsData} />
         {/each}
       </div>
     </div>
