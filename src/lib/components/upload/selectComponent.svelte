@@ -29,7 +29,17 @@
   </div>
   <div id="componentFooter">
     <div id="selectedCount">현재 {$selectedCardList.length}개 선택하였습니다.</div>
-    <div id="search">확인</div>
+    <div id="search"
+      on:click={() => {
+        while ($openedSelectComponent[0]) {
+          console.log('while');
+          openedSelectComponent.update(n => {
+            let returnArr = n;
+            returnArr.pop();
+            return returnArr;
+          })
+        }
+      }}>확인</div>
   </div>
 
 <style>

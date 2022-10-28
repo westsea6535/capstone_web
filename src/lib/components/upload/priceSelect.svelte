@@ -8,13 +8,16 @@
     <ItemPriceSelect index={index}/>
   {/each}
 </div>
-<div id="showSelectedFooter">
+<div id="showSelectedFooter"
+  on:click={() => {
+    window.history.go(-1);
+  }}>
   확인
 </div>
 
 <style>
   #showSelectedWrap {
-    height: 40vh;
+    height: calc(45vh - 30px);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
