@@ -80,7 +80,7 @@
         <!-- {#each testDatas as testData}
           <SingleGoods goodsData={testData}></SingleGoods>
         {/each} -->
-        {#each allGoodsData as goodsData}
+        {#each allGoodsData.reverse() as goodsData}
           <SingleGoods goodsData={goodsData} />
         {/each}
       </div>

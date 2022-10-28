@@ -22,21 +22,13 @@
   }
   const get = (date) => {
     let insideDate = date;
-    console.log(insideDate);
     const dateDays = Math.floor(insideDate / divisors.days);
-    console.log(`days: ${dateDays}`);
     insideDate = insideDate - divisors.days * dateDays;
-    console.log(insideDate);
     const dateHours = Math.floor(insideDate / divisors.hours);
-    console.log(`hours: ${dateHours}`)
     insideDate = insideDate - divisors.hours * dateHours;
-    console.log(insideDate);
     const dateMinutes = Math.floor(insideDate / divisors.minutes);
-    console.log(`minutes: ${dateMinutes}`)
     insideDate = insideDate - divisors.minutes * dateMinutes;
-    console.log(insideDate);
     const dateSeconds = Math.floor(insideDate / divisors.seconds);
-    console.log(`seconds: ${dateSeconds}`)
     return `${dateDays ? `${dateDays}일 전` 
       : dateHours ? `${dateHours}시간 전`
       : dateMinutes ? `${dateMinutes}분 전`
@@ -47,12 +39,9 @@
 
 <div id="goodsDataWrap">
   <div id="goodsImgWrap">
-    <img src={goodsData.imgUrl} alt="loading...">
+    <img src={goodsData.imgUrl[0]} alt="loading...">
   </div>
   <div id="goodsInfo">
-    <!-- <div id="goodsPrice">
-      {`${goodsData.price} 원`}
-    </div> -->
     <div id="goodsTitle">
       {title ? title : '제목 없음'}
     </div>

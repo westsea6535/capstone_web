@@ -110,7 +110,8 @@
         <input type="file" id="addPhoto" on:change={addImage}>
       </div>
     </div>
-    <input type="text" placeholder="상품명" id="goodsNameInput">
+    <input type="text" placeholder="상품명" id="goodsNameInput" 
+      bind:value={bindTitle}>
     <div id="typeSelect">
       <div id="openTypeSelect"
         on:click={() => {
@@ -174,7 +175,7 @@
     </div>
     <div class="divider"></div>
     <label for="etcTextInput">기타 사항 입력</label>
-    <textarea name="etcTextInput" id="etcTextInput" cols="30" rows="10"></textarea>
+    <input type="textarea" id="etcTextInput" bind:value={bindEtcText}>
   </div>
   <div id="uploadFooter">
     <div id="uploadBtn"
