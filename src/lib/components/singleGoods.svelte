@@ -38,17 +38,19 @@
 </script>
 
 <div id="goodsDataWrap">
-  <div id="goodsImgWrap">
-    <img src={goodsData.imgUrl[0]} alt="loading...">
-  </div>
-  <div id="goodsInfo">
-    <div id="goodsTitle">
-      {title ? title : '제목 없음'}
+  <a href="/goods">
+    <div id="goodsImgWrap">
+      <img src={goodsData.imgUrl[0]} alt="loading...">
     </div>
-    <div id="goodsDate">
-      {get(dateDiff)}
+    <div id="goodsInfo">
+      <div id="goodsTitle">
+        {title ? title : '제목 없음'}
+      </div>
+      <div id="goodsDate">
+        {get(dateDiff)}
+      </div>
     </div>
-  </div>
+  </a>
 </div>
 
 <style>
@@ -57,6 +59,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  #goodsDataWrap a {
+    all: unset;
   }
   #goodsImgWrap  {
     aspect-ratio: 1 / 1;
