@@ -7,62 +7,6 @@
   let {allGoodsData} = data;
   console.log(allGoodsData);
 
-  const testDatas = [
-    {
-      title: 'ITZY 있지믿지날자 팬미팅 수료증양도(가격인하)',
-      name: 'ITZY',
-      price: 10000,
-      imageUrl: 'testImage/testImage1.jpg',
-    },
-    {
-      title: '삼성 갤럭시Z플립4 방탄 엽서 방탄소년단 한정판 미니 포스터',
-      name: 'BTS',
-      price: 25000,
-      imageUrl: 'testImage/testImage2.jpg',
-    },
-    {
-      title: 'jyp샵 스트레이키즈 미공포 양도 받아요',
-      name: 'strayKids',
-      price: 50000,
-      imageUrl: 'testImage/testImage3.jpg',
-    },
-    {
-      title: 'ITZY 있지믿지날자 팬미팅 수료증양도(가격인하)',
-      name: 'ITZY',
-      price: 10000,
-      imageUrl: 'testImage/testImage1.jpg',
-    },
-    {
-      title: '삼성 갤럭시Z플립4 방탄 엽서 방탄소년단 한정판 미니 포스터',
-      name: 'BTS',
-      price: 25000,
-      imageUrl: 'testImage/testImage2.jpg',
-    },
-    {
-      title: 'jyp샵 스트레이키즈 미공포 양도 받아요',
-      name: 'strayKids',
-      price: 50000,
-      imageUrl: 'testImage/testImage3.jpg',
-    },
-    {
-      title: 'ITZY 있지믿지날자 팬미팅 수료증양도(가격인하)',
-      name: 'ITZY',
-      price: 10000,
-      imageUrl: 'testImage/testImage1.jpg',
-    },
-    {
-      title: '삼성 갤럭시Z플립4 방탄 엽서 방탄소년단 한정판 미니 포스터',
-      name: 'BTS',
-      price: 25000,
-      imageUrl: 'testImage/testImage2.jpg',
-    },
-    {
-      title: 'jyp샵 스트레이키즈 미공포 양도 받아요',
-      name: 'strayKids',
-      price: 50000,
-      imageUrl: 'testImage/testImage3.jpg',
-    },
-  ]
 
 </script>
 

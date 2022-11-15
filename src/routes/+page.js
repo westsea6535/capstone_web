@@ -10,8 +10,6 @@ export const load = async () => {
 
   allGoodsDataDB.forEach((doc) => {
     allGoodsData.push(doc.data());
-    console.log('dataddddddddddddddd');
-    console.log(doc.data());
   })  
   
 

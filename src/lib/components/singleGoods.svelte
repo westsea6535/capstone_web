@@ -1,4 +1,6 @@
 <script>
+  import { selectedGoodsInfo } from '$lib/stores';
+  
   export let goodsData;
   let {
     user,
@@ -38,7 +40,10 @@
 </script>
 
 <div id="goodsDataWrap">
-  <a href="/goods">
+  <a href="/goods"
+    on:click={() => {
+      selectedGoodsInfo.set(goodsData);
+    }}>
     <div id="goodsImgWrap">
       <img src={goodsData.imgUrl[0]} alt="loading...">
     </div>

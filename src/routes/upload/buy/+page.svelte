@@ -55,6 +55,7 @@
           const docRef = doc(firestore, 'goodsList', docName);
 
           batch.set(docRef, {
+            id: docName,
             title: bindTitle,
             moreInfo: bindEtcText,
             onSell: true,

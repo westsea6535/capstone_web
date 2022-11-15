@@ -24,3 +24,5 @@ export const pagePath = writable('/');
 export const limitBeforeUpdate = writable(true);
 export const openedSelectComponent = writable([]);
 export const selectedCardList = writable([]);
+
+export const selectedGoodsInfo = writable({});
