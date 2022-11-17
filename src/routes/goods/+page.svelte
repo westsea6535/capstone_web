@@ -26,6 +26,9 @@
       <div id="goodsTitle">{$selectedGoodsInfo.title}</div>
       <!-- <div id="goodsDate">{uploadDate}</div> -->
     </div>
+    <div id="uploadUserInfo">
+      {$selectedGoodsInfo.user}
+    </div>
   </div>
   <GoodsCard goodsCardList={goodsCardList} />
 </div>
