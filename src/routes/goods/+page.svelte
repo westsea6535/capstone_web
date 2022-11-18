@@ -16,7 +16,7 @@
         return false;
         }}
     >{`<`}</div>
-    필터로 검색하기
+    선택된 상품
   </div>
   <div id="goodsMain">
     <div id="goodsImg">
@@ -37,6 +37,9 @@
   #wrap {
     height: 100vh;
     overflow: scroll;
+  }
+  #goodsHeader {
+    display: flex;
   }
   #goodsMain {
     display: flex;
