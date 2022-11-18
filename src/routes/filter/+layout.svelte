@@ -15,6 +15,7 @@
   #wrap {
     background-color: white;
     height: 100vh;
+    box-sizing: border-box;
   }
   #filterHeader {
     width: 100%;
@@ -24,6 +25,7 @@
     position: fixed;
     top: 0;
     background-color: white; 
+    z-index: 1;
   }
   #returnBtn {
     margin-right: 20px;

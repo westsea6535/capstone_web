@@ -2,10 +2,19 @@
   import SingleGoods from "$lib/components/singleGoods.svelte";
   import BottomNav from "$lib/components/bottomNav.svelte";
   import UploadNav from "$lib/components/uploadNav.svelte";
+  import { onMount } from 'svelte';
+
+  let Carousel;
+  onMount(async () => {
+    const module = await import('svelte-carousel');
+    console.log(module.default);
+    Carousel = module.default;
+  })
 
   export let data;
   let {allGoodsData} = data;
   console.log(allGoodsData);
+
 
 
 </script>
@@ -14,7 +23,10 @@
   <div id="pageHeader"></div>
   <div id="pageMain">
     <div id="homeLogo">
-      <div id="logo1">로고</div>
+      <svelte:component this={Carousel} autoplay autoplayDuration={2000} dots={false} arrows={false}>
+          <div class="banner" id="firstBanner">banner1</div>
+          <div class="banner" id="secondBanner">banner2</div>
+      </svelte:component>
     </div>
     <div id="goodsListWrap">
       <div id="recentGoodsTitle">
@@ -42,6 +54,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     height: 100vh;
+    z-index: 1;
   }
   #pageHeader {
     min-height: 80px;
@@ -53,16 +66,19 @@
     margin-bottom: 10vh;
   }
   #homeLogo {
-    width: 400px;
+    width: 100vw;
     display: flex;
-
   }
-  #homeLogo div  {
+  .banner {
+    width: 90vw;
     height: 100px;
-    width: 400px;
+    box-sizing: border-box;
   }
-  #logo1 {
-    background-color: #ddffff;
+  #firstBanner {
+    background-color: #ffddff;
+  }
+  #secondBanner {
+    background-color: #ddffdd;
   }
 
   #recentGoodsList {

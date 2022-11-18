@@ -6,7 +6,9 @@
   import { beforeUpdate, afterUpdate } from 'svelte';
   import { beforePagePath, pagePath } from '$lib/stores.js';
 
+
   export let data;
+  console.log(`data: ${data.pathname}`);
   $: currentFirstRoute = $page.url.pathname.split('/')[1];
   console.log(currentFirstRoute);
 
@@ -15,6 +17,7 @@
     if ($limitBeforeUpdate) {
       beforePagePath.set($pagePath);
       pagePath.set(data.pathname);
+      console.log(`layoutPagePath: ${$pagePath}`);
     }
     limitBeforeUpdate.set(!$limitBeforeUpdate);
     console.log(`beforePagePath: ${$beforePagePath}`);

@@ -3,19 +3,29 @@ import { writable, readable } from "svelte/store";
 export const idolAllInfo = {
   'BTS' : {
     name: 'BTS',
-    member: ['RM', 'Jin', 'Suga',],
-    types: ['album1', 'album2', 'album3',],
+    name_kor: '방탄소년단',
+    member: ['rm', 'jin', 'suga', 'jhope', 'jimin', 'jungkook', 'v'],
+    types: ['proof', 'album2', 'album3',],
+    currentProfile: 'proof',
+    imageExist: true,
   },
   'ITZY' : {
     name: 'ITZY',
-    member: ['LIA', 'Yeji', 'Yuna', 'Ryujin', 'Chaeryung'],
-    types: ['digital_single_1st', 'mini_first', 'mini_second', 'mini_third', 'digital_single_2nd', 'mini_firth', 'regular_1st', 'mini_5th'],
+    member: ['lia', 'yeji', 'yuna', 'ryujin', 'chaeryeong'],
+    types: ['checkmate', 'mini_first', 'mini_second', 'mini_third', 'digital_single_2nd', 'mini_firth', 'regular_1st', 'mini_5th'],
+    currentProfile: 'checkmate',
+    imageExist: true,
   },
-  'StrayKids' : {
-    name: 'StrayKids',
-    member: ['Mem1', 'Mem2', 'Mem3',],
-    types: ['album1', 'album2', 'album3',],
-  }
+  'gidle' : {
+    name: 'gidle',
+    name_kor: '(여자)아이들',
+    member: ['miyeon', 'minnie', 'soyeon', 'yuqi', 'shuhua',],
+    types: ['ilove',],
+    cardTypes: ['album_1', 'album_2', 'album_3', 'album_4', 'album_5', 'album_6', 'jewelver_1','jewelver_2', 'jewelver_3', ],
+    currentProfile: 'ilove',
+    imageExist: true,
+    cardImageExist: true,
+  },
 };
 
 export const beforePagePath = writable('/')
@@ -45,3 +55,10 @@ export const testPhotoCardImg = readable({
     ]
   }
 })
+
+export const pageRouteData = writable('');
+
+export let user = writable({});
+export let isLoggedIn = writable(false);
+export let openLoginDiv = writable(false);
+export const disabledEmailLogin = readable(true);

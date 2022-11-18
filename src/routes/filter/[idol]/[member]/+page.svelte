@@ -1,6 +1,8 @@
 <script>
   import { idolAllInfo } from '$lib/stores.js';
+  
   export let data;
+
 
   const typesList = idolAllInfo[data.selectedIdol].types;
 
@@ -25,6 +27,7 @@
     padding: 10px;
     padding-top: 65px;
     overflow: scroll;
+    background-color: #fffff3;
   }
   .typesImgWrap {
     display: flex;
