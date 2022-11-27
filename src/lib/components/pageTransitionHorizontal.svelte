@@ -12,9 +12,9 @@
 		const style = getComputedStyle(node);
 		const opacity = +style.opacity;
 		const primary_dimension = axis === 'y' ? 'height' : 'width';
-    console.log('inTransition');
-    console.log($beforePagePath);
-    console.log($pagePath);
+    // console.log('inTransition');
+    // console.log($beforePagePath);
+    // console.log($pagePath);
     if (['', 'chat', 'like', 'myPage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'myPage'].includes($pagePath.split('/')[1])) {
       return;
     }
@@ -48,9 +48,9 @@
 		const style = getComputedStyle(node);
 		const opacity = +style.opacity;
 		const primary_dimension = axis === 'y' ? 'height' : 'width';
-    console.log('outTransition');
-    console.log($beforePagePath);
-    console.log($pagePath);
+    // console.log('outTransition');
+    // console.log($beforePagePath);
+    // console.log($pagePath);
     if (['', 'chat', 'like', 'myPage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'myPage'].includes($pagePath.split('/')[1])) {
       return;
     }

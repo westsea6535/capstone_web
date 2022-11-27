@@ -17,3 +17,6 @@ export const load = async () => {
     allGoodsData,
   }
 }
+
+export const csr = true;
+export const ssr = false;

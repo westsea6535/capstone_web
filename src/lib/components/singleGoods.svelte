@@ -45,6 +45,7 @@
       selectedGoodsInfo.set(goodsData);
     }}>
     <div id="goodsImgWrap">
+      <div class="beforeImgRender"></div>
       <img src={goodsData.imgUrl[0]} alt="loading...">
     </div>
     <div id="goodsInfo">
@@ -60,6 +61,7 @@
 
 <style>
   #goodsDataWrap {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,14 +69,24 @@
   }
   #goodsDataWrap a {
     all: unset;
+    width: inherit;
   }
   #goodsImgWrap  {
     aspect-ratio: 1 / 1;
     overflow: hidden;
+    position: relative;
+  }
+  #goodsImgWrap .beforeImgRender {
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    background-color: #cdcdcd;
   }
   #goodsImgWrap img {
     width: 100%;
     border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   #goodsTitle {
     font-size: 12px;

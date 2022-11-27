@@ -1,39 +1,64 @@
 <script>
   import { idolAllInfo } from '$lib/stores.js';
-  import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-  import firebase from '$lib/firebase';
+  import { afterUpdate, onMount } from 'svelte';
 
-  const storage = getStorage(firebase);
-  let imgUrlInfo = {};
+  // export let data;
 
-  Object.entries(idolAllInfo).forEach((e) =>  {
-    if (e[1].imageExist) {
-      getDownloadURL(ref(storage, `list/${e[0]}/profile/${e[1].currentProfile}_all.jpg`))
-        .then((url) => {
-          imgUrlInfo[e[0]] = url;
-        })
-      console.log(imgUrlInfo);
+  // let { imgUrlInfo, getAllDownloadUrl } = data;
+  // $: imgUrlInfo = imgUrlInfo;
+
+  const getAllDownloadUrl = async () => {
+    for (const idolInfo of Object.entries(idolAllInfo)) {
     }
+  }
+
+  Object.entries(idolAllInfo).forEach(() => {
+    console.log("pagejs entries");
+    console.log(idolInfo);
+    getDownloadURL(ref(storage, `list/${idolInfo[0]}/profile/${idolInfo[1].currentProfile}_all.jpg`))
+      .then((url) => {
+        imgUrlInfo[idolInfo[0]] = url;
+        console.log("idolInfo[0]: " + idolInfo[0]);
+      })
   })
+
+  afterUpdate(() => {
+    console.log('updated');
+    console.log(imgUrlInfo);
+  })
+
 
 </script>
 
 <div id="idolFilter">
-  {#each Object.entries(idolAllInfo) as [idolName, idolInfo]}
-    <a class='idolImgWrap'
-      href={`/filter/${idolName}`}>
-      {#if !idolInfo.imageExist}
-        <div class="idolImgReplace">
-          {idolInfo.name}
-        </div>
-      {:else if idolInfo.imageExist}
-        <div class="idolImg">
-          <img src={imgUrlInfo[idolName]} alt="loading...">
-        </div>
-      {/if}
-      <div class="idolName">{idolInfo.name}</div>
-    </a>
-  {/each}
+  <button on:click={() => {
+    for (let i = 0; i < 3; i++) {
+      console.log(idolAllInfo);
+      console.log(imgUrlInfo);
+      // console.log(Object.entries(imgUrlInfo)[i]);
+      // console.log(idolAllInfo[Object.entries(imgUrlInfo)[i][0]]);
+    }
+  }}></button>
+  {#if imgUrlInfo}
+    {#each Object.entries(imgUrlInfo) as [idolName, imgUrl]}
+      <div class="idolImgWrap">
+        <a href={`/filter/${idolName}`}>
+          {#if idolAllInfo[idolName].imageExist}
+            <div class="idolImgReplace">
+              {idolAllInfo[idolName].name}
+            </div>
+          {:else if idolAllInfo[idolName].imageExist}
+            <div class="idolImg">
+              <div class="beforeImgRender"></div>
+              <img src={imgUrl} alt="loading...">
+            </div>
+          {/if}
+          <div class="idolName">{idolAllInfo[idolName].name}</div>
+        </a>
+      </div>
+    {/each}
+  {/if}
+
 </div>
 
 <style>
@@ -47,10 +72,15 @@
     background-color: #fffff3;
   }
   .idolImgWrap {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .idolImgWrap a {
+    all: unset;
+    width: inherit;
   }
   .idolImgReplace {
     width: 100%; 
@@ -62,10 +92,22 @@
     box-sizing: border-box;
     border-radius: 50%;
   }
+  .idolImg  {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+  .idolImg .beforeImgRender {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #cdcdcd;
+  }
   .idolImg img {
     border-radius: 50%;
-    object-fit: cover;
     width: 100%;
-    box-shadow: 0 0 2px 2px #cdcdcd;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 </style>

@@ -15,7 +15,7 @@
   #wrap {
     background-color: white;
     height: 100vh;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
   }
   #filterHeader {
     width: 100%;

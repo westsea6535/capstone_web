@@ -2,6 +2,13 @@
   import BottomNav from '$lib/components/bottomNav.svelte';
   import Login from '$lib/components/login.svelte';
   import { isLoggedIn, openLoginDiv, user } from '$lib/stores';
+  import { onAuthStateChanged, signOut } from 'firebase/auth';
+  import { auth, provider } from '$lib/firebaseAuth';
+  // import { setCustomParameter } from
+
+  // onAuthStateChanged(auth, (user) => {
+  //   if 
+  // })
 </script>
 <div id="wrap">
   <div id="pageHeader">
@@ -11,7 +18,7 @@
     <div id="userInfo">
       <div id="userInfoCard">
         <div id="userImage"></div>
-        {#if $openLoginDiv}
+        {#if !$isLoggedIn}
           <div id="loginTitle"
             on:click={() => openLoginDiv.set(true)}>
             로그인 하기&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>
@@ -20,13 +27,28 @@
           <div id="logined">
             로그인 되었습니다.
           </div>
+          <div id="logOutbtn"
+            on:click={() => signOut(auth)}>로그아웃</div>
         {/if}
       </div>
     </div>
     <div id="userLike">
       <div id="userLikeTitle" 
         on:click={() => {
-          console.log($user);
+          if ($user) {
+            console.log($user.displayName);
+            console.log($user.email);
+            console.log($user.providerId);
+            console.log($user.metadata);
+            console.log($user.uid);
+            console.log($user.refreshToken);
+            console.log($user.tenantId);
+            console.log($user.uid);
+            console.log($user.uid);
+            console.log($user);
+          } else {
+            console.log("no user");
+          }
         }}>
         즐겨찾기한 아이돌
       </div>
