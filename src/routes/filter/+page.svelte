@@ -1,62 +1,92 @@
 <script>
-  import { idolAllInfo } from '$lib/stores.js';
+  import { idolAllInfo, currentFilterOrder } from '$lib/stores.js';
   import { afterUpdate, onMount } from 'svelte';
 
-  // export let data;
-
-  // let { imgUrlInfo, getAllDownloadUrl } = data;
-  // $: imgUrlInfo = imgUrlInfo;
-
-  const getAllDownloadUrl = async () => {
-    for (const idolInfo of Object.entries(idolAllInfo)) {
-    }
-  }
-
-  Object.entries(idolAllInfo).forEach(() => {
-    console.log("pagejs entries");
-    console.log(idolInfo);
-    getDownloadURL(ref(storage, `list/${idolInfo[0]}/profile/${idolInfo[1].currentProfile}_all.jpg`))
-      .then((url) => {
-        imgUrlInfo[idolInfo[0]] = url;
-        console.log("idolInfo[0]: " + idolInfo[0]);
-      })
-  })
+  export let data;
 
   afterUpdate(() => {
-    console.log('updated');
-    console.log(imgUrlInfo);
+    console.log("updated in filter");
   })
-
 
 </script>
 
 <div id="idolFilter">
-  <button on:click={() => {
-    for (let i = 0; i < 3; i++) {
-      console.log(idolAllInfo);
-      console.log(imgUrlInfo);
-      // console.log(Object.entries(imgUrlInfo)[i]);
-      // console.log(idolAllInfo[Object.entries(imgUrlInfo)[i][0]]);
-    }
-  }}></button>
-  {#if imgUrlInfo}
-    {#each Object.entries(imgUrlInfo) as [idolName, imgUrl]}
-      <div class="idolImgWrap">
-        <a href={`/filter/${idolName}`}>
-          {#if idolAllInfo[idolName].imageExist}
-            <div class="idolImgReplace">
-              {idolAllInfo[idolName].name}
-            </div>
-          {:else if idolAllInfo[idolName].imageExist}
+  {#if data}
+    {#if $currentFilterOrder.length == 0}
+      {#each Object.entries(data.idolInfoAll) as [idolName, singleInfo]}
+        <div 
+          class="idolImgWrap"
+          on:click={() => {
+            window.history.pushState({}, ''); 
+            currentFilterOrder.update((prev) => {
+              let returnArr = [...prev];
+              returnArr.push(idolName);
+              return returnArr;
+            })
+            console.log($currentFilterOrder);
+          }}>
+          <div class="widthInherit">
+            {#if !singleInfo.imageExist}
+              <div class="idolImgReplace">
+                {singleInfo.name}
+              </div>
+            {:else if singleInfo.imageExist}
+              <div class="idolImg">
+                <div class="beforeImgRender"></div>
+                <img src={singleInfo.imageURL} alt="loading...">
+              </div>
+            {/if}
+          </div>
+          <div class="idolName">{singleInfo.name}</div>
+        </div>
+      {/each}
+    {:else if $currentFilterOrder.length == 1}
+      {#each Object.entries(data.idolInfoAll[$currentFilterOrder[0]].memberImageURL) as [memberName, memberImageURL]}
+        <div 
+          class="idolImgWrap"
+          on:click={() => {
+            window.history.pushState({}, ''); 
+            currentFilterOrder.update((prev) => {
+              let returnArr = [...prev];
+              returnArr.push(memberName);
+              return returnArr;
+            })
+            console.log($currentFilterOrder);
+            console.log(data.idolInfoAll[$currentFilterOrder[0]].types)
+          }}>
+          <div class="widthInherit">
             <div class="idolImg">
               <div class="beforeImgRender"></div>
-              <img src={imgUrl} alt="loading...">
+              <img src={memberImageURL} alt="loading...">
             </div>
-          {/if}
-          <div class="idolName">{idolAllInfo[idolName].name}</div>
+          </div>
+          <div class="idolName">{memberName}</div>
+        </div>
+      {/each}
+    {:else if $currentFilterOrder.length == 2}
+      {#each data.idolInfoAll[$currentFilterOrder[0]].types as type}
+        <!-- <div 
+          class="idolImgWrap"
+          on:click={() => {
+            window.history.pushState({}, ''); 
+            currentFilterOrder.update((prev) => {
+              let returnArr = [...prev];
+              returnArr.push(type);
+              return returnArr;
+              console.log($currentFilterOrder);
+            })
+          }}> -->
+        <a href="/filter/album">
+          <div class="widthInherit">
+            <div class="idolImgReplace">
+              {type}
+            </div>
+          </div>
+          <div class="idolName">{type}</div>
         </a>
-      </div>
-    {/each}
+        <!-- </div> -->
+      {/each}
+    {/if}
   {/if}
 
 </div>
@@ -78,12 +108,11 @@
     justify-content: center;
     align-items: center;
   }
-  .idolImgWrap a {
-    all: unset;
+  .widthInherit {
     width: inherit;
   }
   .idolImgReplace {
-    width: 100%; 
+    width: inherit; 
     aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;

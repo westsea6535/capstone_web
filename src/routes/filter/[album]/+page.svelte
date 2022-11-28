@@ -1,31 +1,35 @@
 <script>
-  import { idolAllInfo, pagePath } from '$lib/stores.js';
+  import { idolAllInfo, currentFilterOrder, dbIdolAllInfo } from '$lib/stores.js';
   import { getStorage, ref, getDownloadURL } from 'firebase/storage';
   import firebase from '$lib/firebase';
-  import { page } from '$app/stores'
-    import { afterUpdate, onMount } from 'svelte';
-    import { query_selector_all } from 'svelte/internal';
+  import { afterUpdate, onMount } from 'svelte';
 
   onMount(() => console.log('mount')) 
   afterUpdate(() => console.log('update'))
 
-  // export let data;
-  const pathArray = $page.url.pathname.split('/');
 
   const data = {
-    selectedIdol: pathArray[2],
-    selectedMember: pathArray[3],
-    selectedAlbum: pathArray[4],
+    selectedIdol: $currentFilterOrder[0],
+    selectedMember: $currentFilterOrder[1],
+    selectedAlbum: $currentFilterOrder[2],
   }
+
+  console.log("album data");
+  console.log(data);
+  console.log($currentFilterOrder);
+  console.log($dbIdolAllInfo);
+
   const pathAlbum = data.selectedAlbum;
 
   const storage = getStorage(firebase);
 
-  const typeList = idolAllInfo[data.selectedIdol].cardTypes;
+  const typeList = $dbIdolAllInfo[data.selectedIdol]?.cardTypes;
+  console.log(typeList);
 
   let imgUrlInfo = {};
 
-  if (idolAllInfo[data.selectedIdol].cardImageExist) {
+  if ($dbIdolAllInfo[data.selectedIdol]?.cardImageExist) {
+    console.log('imgUrlInfo');
     console.log(imgUrlInfo);
     typeList.forEach((type) => {
       if (imgUrlInfo[`${data.selectedAlbum}_${type}_${data.selectedMember}`]) {
@@ -82,34 +86,36 @@
   bind:this={filterPage}
   on:scroll={findScroll}
   >
-  {#each typeList as type, index}
-    <div class="cardsImgWrap">
-      {#if idolAllInfo[data.selectedIdol].cardImageExist}
-      <div class="cardsImg"
-        on:click={(e) => {
-          console.log(e.target.parentNode.querySelector('.photoCardImg').style.opacity);
-          if ((e.target.parentNode.querySelector('.photoCardImg').style.opacity == 1) || (e.target.parentNode.querySelector('.photoCardImg').style.opacity == undefined)) {
-            console.log('hello');
-            e.target.parentNode.querySelector('.photoCardImg').style.opacity = 0.5;
-          } else {
-            e.target.parentNode.querySelector('.photoCardImg').style.opacity = 1;
-          }
-          console.log(e.target.parentNode.querySelector('.photoCardImg').style.opacity);
-        }}>
-        <img class="photoCardImg" src={`${imgUrlInfo[`${data.selectedAlbum}_${type}_${data.selectedMember}`]}`} alt="loading..." style={`opacity: 1; z-index: 0;`}>
-      </div>
-      <div class="cardName">
-        {`${type}`}
-      </div>
-
-      {:else}
-        <div class="cardsImgReplace">
-          {`card${index}`}
+  {#if typeList}
+    {#each typeList as type, index}
+      <div class="cardsImgWrap">
+        {#if $dbIdolAllInfo[data.selectedIdol].cardImageExist}
+        <div class="cardsImg"
+          on:click={(e) => {
+            console.log(e.target.parentNode.querySelector('.photoCardImg').style.opacity);
+            if ((e.target.parentNode.querySelector('.photoCardImg').style.opacity == 1) || (e.target.parentNode.querySelector('.photoCardImg').style.opacity == undefined)) {
+              console.log('hello');
+              e.target.parentNode.querySelector('.photoCardImg').style.opacity = 0.5;
+            } else {
+              e.target.parentNode.querySelector('.photoCardImg').style.opacity = 1;
+            }
+            console.log(e.target.parentNode.querySelector('.photoCardImg').style.opacity);
+          }}>
+          <img class="photoCardImg" src={`${imgUrlInfo[`${data.selectedAlbum}_${type}_${data.selectedMember}`]}`} alt="loading..." style={`opacity: 1; z-index: 0;`}>
         </div>
-        <div class="cardsName">{`card${index}`}</div>
-      {/if}
-    </div>
-  {/each}
+        <div class="cardName">
+          {`${type}`}
+        </div>
+
+        {:else}
+          <div class="cardsImgReplace">
+            {`card${index}`}
+          </div>
+          <div class="cardsName">{`card${index}`}</div>
+        {/if}
+      </div>
+    {/each}
+  {/if}
   <div id="cardSearchNav" class:hideDiv={scrollDirectionBottom}>
     검색하기
   </div>

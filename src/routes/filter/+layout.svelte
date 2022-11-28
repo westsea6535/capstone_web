@@ -1,8 +1,17 @@
+<script>
+  import { currentFilterOrder } from '$lib/stores';
+    import BuyComponent from '../../lib/components/upload/buyComponent.svelte';
+</script>
 <div id="wrap">
   <div id="filterHeader">
     <div id="returnBtn" 
       on:click={() => {
         window.history.go(-1);
+        currentFilterOrder.update((prev) => {
+          let returnArr = [...prev];
+          returnArr.pop();
+          return returnArr;
+        });
         return false;
         }}
     >{`<`}</div>
