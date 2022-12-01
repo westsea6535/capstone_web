@@ -4,6 +4,12 @@
   // import firebase from '$lib/firebase.js';
   import {user, isLoggedIn, openLoginDiv, disabledEmailLogin} from '$lib/stores';
 
+  import { getFirestore, doc, getDoc, collection, setDoc } from 'firebase/firestore';
+  import firebase from '$lib/firebase';
+
+  const db = getFirestore(firebase);
+  const collectionRef = collection(db, "user");
+
   async function onGoogleLoginBtnClcicked() {
     await signInWithPopup(auth, provider)
       .then((result) => {
@@ -12,6 +18,17 @@
         isLoggedIn.set(true);
         openLoginDiv.set(false);
         console.log($isLoggedIn);
+
+        const docRef = doc(db, "user", result.user.uid);
+        setDoc(docRef, {
+          email: result.user.email,
+          uid: result.user.uid,
+          creationTime: result.user.metadata.creationTime,
+          lastSignInTime: result.user.metadata.lastSignInTime,
+          userName: result.user.displayName,
+          loginMethod: "google",
+        }, {merge: true});  
+
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -20,7 +37,7 @@
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log('error');
         console.log(errorCode);
-        console.log(email);
+        console.log(email); 
         console.log(errorMessage);
         console.log(credential);
       })
