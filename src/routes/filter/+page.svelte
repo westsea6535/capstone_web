@@ -65,18 +65,16 @@
       {/each}
     {:else if $currentFilterOrder.length == 2}
       {#each data.idolInfoAll[$currentFilterOrder[0]].types as type}
-        <!-- <div 
-          class="idolImgWrap"
+        <a href="/filter/album"
           on:click={() => {
-            window.history.pushState({}, ''); 
+            console.log($currentFilterOrder); 
             currentFilterOrder.update((prev) => {
               let returnArr = [...prev];
               returnArr.push(type);
               return returnArr;
-              console.log($currentFilterOrder);
             })
-          }}> -->
-        <a href="/filter/album">
+            console.log($currentFilterOrder); 
+          }}>
           <div class="widthInherit">
             <div class="idolImgReplace">
               {type}

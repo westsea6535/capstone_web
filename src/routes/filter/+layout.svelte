@@ -1,6 +1,10 @@
 <script>
   import { currentFilterOrder } from '$lib/stores';
-    import BuyComponent from '../../lib/components/upload/buyComponent.svelte';
+  import { onMount } from 'svelte';
+
+  // onMount(() => {
+  //   currentFilterOrder.set([]); 
+  // })
 </script>
 <div id="wrap">
   <div id="filterHeader">
@@ -10,6 +14,8 @@
         currentFilterOrder.update((prev) => {
           let returnArr = [...prev];
           returnArr.pop();
+          console.log(prev);
+          console.log(returnArr);
           return returnArr;
         });
         return false;
