@@ -8,23 +8,23 @@
 
 
   export let data;
-  console.log(`data: ${data.pathname}`);
+  // console.log(`data: ${data.pathname}`);
   $: currentFirstRoute = $page.url.pathname.split('/')[1];
-  console.log(currentFirstRoute);
+  // console.log(currentFirstRoute);
 
   beforeUpdate(() => {
-    console.log('beforeUpdate');
+    // console.log('beforeUpdate');
     if ($limitBeforeUpdate) {
       beforePagePath.set($pagePath);
       pagePath.set(data.pathname);
-      console.log(`layoutPagePath: ${$pagePath}`);
+      // console.log(`layoutPagePath: ${$pagePath}`);
     }
     limitBeforeUpdate.set(!$limitBeforeUpdate);
-    console.log(`beforePagePath: ${$beforePagePath}`);
-    console.log(`pagePath: ${$pagePath}`);
+    // console.log(`beforePagePath: ${$beforePagePath}`);
+    // console.log(`pagePath: ${$pagePath}`);
   })
   afterUpdate(() => {
-    console.log('afterUpdate');
+    // console.log('afterUpdate');
   })
 
 </script>

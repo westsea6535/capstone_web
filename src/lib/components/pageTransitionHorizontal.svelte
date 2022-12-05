@@ -12,10 +12,10 @@
 		const style = getComputedStyle(node);
 		const opacity = +style.opacity;
 		const primary_dimension = axis === 'y' ? 'height' : 'width';
-    // console.log('inTransition');
-    // console.log($beforePagePath);
-    // console.log($pagePath);
-    if (['', 'chat', 'like', 'myPage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'myPage'].includes($pagePath.split('/')[1])) {
+    console.log('inTransition');
+    console.log($beforePagePath);
+    console.log($pagePath);
+    if (['', 'chat', 'like', 'mypage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'mypage'].includes($pagePath.split('/')[1])) {
       return;
     }
     if ($beforePagePath.length < $pagePath.length) {
@@ -48,10 +48,10 @@
 		const style = getComputedStyle(node);
 		const opacity = +style.opacity;
 		const primary_dimension = axis === 'y' ? 'height' : 'width';
-    // console.log('outTransition');
-    // console.log($beforePagePath);
-    // console.log($pagePath);
-    if (['', 'chat', 'like', 'myPage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'myPage'].includes($pagePath.split('/')[1])) {
+    console.log('outTransition');
+    console.log($beforePagePath);
+    console.log($pagePath);
+    if (['', 'chat', 'like', 'mypage'].includes($beforePagePath.split('/')[1]) && ['', 'chat', 'like', 'mypage'].includes($pagePath.split('/')[1])) {
       return;
     }
     if ($beforePagePath.length < $pagePath.length) {

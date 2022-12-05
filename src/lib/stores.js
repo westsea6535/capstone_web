@@ -63,6 +63,7 @@ export const testPhotoCardImg = readable({
 export const pageRouteData = writable('');
 
 export let user = writable({});
+export let userData = writable({});
 export let isLoggedIn = writable(false);
 export let openLoginDiv = writable(false);
 export const disabledEmailLogin = readable(true);

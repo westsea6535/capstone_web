@@ -1,15 +1,24 @@
 <script>
   import BottomNav from '$lib/components/bottomNav.svelte';
   import Login from '$lib/components/login.svelte';
-  import { isLoggedIn, openLoginDiv, user } from '$lib/stores';
+  import { isLoggedIn, openLoginDiv, user, userData } from '$lib/stores';
   import { onAuthStateChanged, signOut } from 'firebase/auth';
   import { auth, provider } from '$lib/firebaseAuth';
-  // import { setCustomParameter } from
+  import SingleGoods from '$lib/components/singleGoods.svelte';
 
-  // onAuthStateChanged(auth, (user) => {
-  //   if 
-  // })
+  let currentUserGoodsSelect = "upload";
+
+  const testGoodsInfo = {
+    user: "testUser1",
+    moreInfo: "no moreInfo",
+    onSell: true,
+    title: "test Title 1",
+    uploadDate: new Date(),
+    imgUrl: null,
+    isTestData: true,
+  }
 </script>
+
 <div id="wrap">
   <div id="pageHeader">
     <div id="title">마이 페이지</div>
@@ -33,37 +42,60 @@
       </div>
     </div>
     <div id="userLike">
-      <div id="userLikeTitle" 
-        on:click={() => {
-          if ($user) {
-            console.log($user.displayName);
-            console.log($user.email);
-            console.log($user.providerId);
-            console.log($user.metadata);
-            console.log($user.uid);
-            console.log($user.refreshToken);
-            console.log($user.tenantId);
-            console.log($user.uid);
-            console.log($user.uid);
-            console.log($user);
-          } else {
-            console.log("no user");
-          }
-        }}>
+      <div id="userLikeTitle">
         즐겨찾기한 아이돌
       </div>
-    </div>
-    <div id="userChoice">
-      <div id="userChoiceTitle">
-        찜한 상품
-      </div>
-    </div>
-    <div id="userSell">
-      <div id="userSellTitle">
-        판매하는 상품
-      </div>
-    </div>
+      <div id="userLikeList">
+        {#if !$isLoggedIn}
+          <div id="userLikeNotLogin">
+            로그인하여 즐겨찾기 할 아이돌을 선택하세요.
+          </div>
+        {:else}
+          {#if $userData.userLikeList}
+            {#each $userData.userLikeList as userLike}
+              <div class="userLikeImg">
 
+              </div> 
+            {/each}
+          {:else}
+            <div id="noUserLike">
+              즐겨찾기한 아이돌이 없습니다. 클릭하면 설정으로 이동합니다.
+            </div>
+          {/if}
+        {/if}
+      </div>
+    </div>
+    <div id="userGoods">
+      <div id="userGoodsSelectionNav">
+        <div 
+          class={`userGoodsSelectionBtn ${currentUserGoodsSelect === "upload" ? "selectedSelection" : ""}`}
+          on:click={() => currentUserGoodsSelect = "upload"}>
+          판매 상품
+        </div>
+        <div 
+          class={`userGoodsSelectionBtn ${currentUserGoodsSelect === "want" ? "selectedSelection" : ""}`}
+          on:click={() => currentUserGoodsSelect = "want"}>
+          찜한 상품
+        </div>
+        <div 
+          class={`userGoodsSelectionBtn ${currentUserGoodsSelect === "finished" ? "selectedSelection" : ""}`}
+          on:click={() => currentUserGoodsSelect = "finished"}>
+          거래 완료 상품
+        </div>
+      </div>
+      {currentUserGoodsSelect}
+      {#if !$isLoggedIn}
+        <div id="userLikeNotLogin">
+          로그인하여 상품 등록
+        </div>
+      {:else}
+        <div id="userGoodsMain">
+          {#each Array(7) as _}
+            <SingleGoods goodsData={testGoodsInfo}/> 
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
   <BottomNav />
   {#if $openLoginDiv}
@@ -76,6 +108,8 @@
   #wrap {
     height: 100vh;
     overflow-y: scroll;
+    padding-bottom: 10vh;
+    box-sizing: border-box;
   }
   #title {
     font-size: 30px;
@@ -108,4 +142,40 @@
     border-radius: 5px;
     background-color: #cdcdcd;
   }
+  #userLikeTitle {
+    padding: 15px 10px 5px;
+    font-size: 20px;
+  }
+  #userLikeNotLogin {
+    color: #888;
+  } 
+  #userGoods {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+  }
+  #userGoodsSelectionNav {
+    padding: 7px 10px;
+    display: flex;
+    gap: 6px;
+  }
+  .userGoodsSelectionBtn {
+    font-size: 14px;
+    padding: 6px 13px;
+    border: 1px solid #abcf93;
+    border-radius: 14px;
+    color: #abcf93
+  }
+  .selectedSelection {
+    background-color: #f0ffe5;
+  }
+  #userGoodsMain {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 3px;
+    border: 1px solid black;
+    box-sizing: border-box;
+  }
+
 </style>

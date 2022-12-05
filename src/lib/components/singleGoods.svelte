@@ -9,6 +9,7 @@
     title,
     uploadDate,
     imgUrl,
+    isTestData,
   } = goodsData;
 
   const uploadDateDate = new Date(uploadDate.seconds * 1000);
@@ -36,7 +37,7 @@
       : dateMinutes ? `${dateMinutes}분 전`
       : `${dateSeconds}초 전`}`
   }
-  console.log(get(dateDiff));
+  // console.log(get(dateDiff));
 </script>
 
 <div id="goodsDataWrap">
@@ -46,15 +47,19 @@
     }}>
     <div id="goodsImgWrap">
       <div class="beforeImgRender"></div>
-      <img src={goodsData.imgUrl[0]} alt="loading...">
+      <img src={goodsData.imgUrl?.[0]} alt="loading...">
     </div>
     <div id="goodsInfo">
       <div id="goodsTitle">
         {title ? title : '제목 없음'}
       </div>
-      <div id="goodsDate">
-        {get(dateDiff)}
-      </div>
+      {#if isTestData} 
+        <div id="goodsDate">1일 전</div>
+      {:else}
+        <div id="goodsDate">
+          {get(dateDiff)}
+        </div>
+      {/if}
     </div>
   </a>
 </div>

@@ -2,7 +2,7 @@
   import { auth, provider } from '$lib/firebaseAuth';
   import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
   // import firebase from '$lib/firebase.js';
-  import {user, isLoggedIn, openLoginDiv, disabledEmailLogin} from '$lib/stores';
+  import {user, isLoggedIn, openLoginDiv, disabledEmailLogin, userData } from '$lib/stores';
 
   import { getFirestore, doc, getDoc, collection, setDoc } from 'firebase/firestore';
   import firebase from '$lib/firebase';
@@ -11,37 +11,48 @@
   const collectionRef = collection(db, "user");
 
   async function onGoogleLoginBtnClcicked() {
-    await signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result.user);
-        user.set(result.user);
-        isLoggedIn.set(true);
-        openLoginDiv.set(false);
-        console.log($isLoggedIn);
+    try {
+      const authResult = await signInWithPopup(auth, provider)
+      console.log(authResult.user);
+      user.set(authResult.user);
+      isLoggedIn.set(true); 
+      openLoginDiv.set(false);
 
-        const docRef = doc(db, "user", result.user.uid);
-        setDoc(docRef, {
-          email: result.user.email,
-          uid: result.user.uid,
-          creationTime: result.user.metadata.creationTime,
-          lastSignInTime: result.user.metadata.lastSignInTime,
-          userName: result.user.displayName,
-          loginMethod: "google",
-        }, {merge: true});  
+      const docRef = doc(db, "user", authResult.user.uid);
+      console.log("got docRef");
 
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('error');
-        console.log(errorCode);
-        console.log(email); 
-        console.log(errorMessage);
-        console.log(credential);
-      })
+      await setDoc(docRef, {
+        email: authResult.user.email,
+        uid: authResult.user.uid,
+        creationTime: authResult.user.metadata.creationTime,
+        lastSignInTime: authResult.user.metadata.lastSignInTime,
+        userName: authResult.user.displayName,
+        loginMethod: "google",
+      }, {merge: true});  
+      console.log("setDoc");
+
+      try {
+        const userDocSnap = await getDoc(docRef);
+        userData.set(userDocSnap.data())
+        console.log($userData);
+      } catch(error) {
+        console.log(error);
+      }
+      
+    } catch(error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log('error');
+      console.log(errorCode);
+      // console.log(email); 
+      console.log(errorMessage);
+      console.log(credential);
+
+    }
   }
+
   async function logOut(){
     signOut(auth)
   }
@@ -71,7 +82,9 @@
 
       <div id="socialLogin" class="fontDefault">
         <div id="googleLogin" 
-          on:click={onGoogleLoginBtnClcicked}>
+          on:click={() => {
+            onGoogleLoginBtnClcicked();
+          }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
             <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
               <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
