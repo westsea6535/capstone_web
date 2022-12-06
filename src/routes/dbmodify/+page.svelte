@@ -3,6 +3,9 @@
   import { getFirestore, setDoc, doc } from 'firebase/firestore';
   const firestore = getFirestore(firebase);
   const docRef = doc(firestore, "idolInfo", "idolList");
+  
+  import { getDatabase, ref, set } from 'firebase/database';
+  const dbRef = getDatabase(firebase);
 
   const data = {
     'BTS' : {
@@ -58,14 +61,111 @@
     },
   }
   
-  const uploadDataToDb = async () => {
+  const uploadDataToFirestore = async () => {
     await setDoc(docRef, data);
     console.log("dataUploaded");
 
   }
+
+  const uploadDataToRealTimeDB = async () => {
+    // await set(ref(dbRef, 'user'), {
+    const currentDate = new Date();
+    await set(ref(dbRef, 'user'), {
+      userTest: "test",
+      // user: {
+      //   "51qQAD2b5RdWapSeaiPs3Ti102t2": {
+      //     isChatWith: ["SXhPtPjryrQunIV5D18Oay9AEBH3",],
+      //     roomList: {
+      //       "1": {
+      //         recentActive: currentDate,
+      //         oponentUID: "SXhPtPjryrQunIV5D18Oay9AEBH3",
+      //         oponentName: "테스트 유저 1",
+      //         recentMessage: "최근 메시지가 표시 됩니다.",
+      //         oponentProfileImage: "",
+      //       }
+      //     }
+      //   },
+      //   "SXhPtPjryrQunIV5D18Oay9AEBH3": {
+      //     isChatWith: ["51qQAD2b5RdWapSeaiPs3Ti102t2",],
+      //     roomList: {
+      //       "1": {
+      //         recentActive: currentDate,
+      //         oponentUID: "51qQAD2b5RdWapSeaiPs3Ti102t2",
+      //         oponentName: "테스트 유저 2",
+      //         recentMessage: "최근 메시지가 표시 됩니다.",
+      //         oponentProfileImage: "",
+      //       }
+      //     }
+      //   },
+      // },
+      // room: {
+      //   "1": {
+      //     user: [{
+      //       name: "테스트 유저 2",
+      //       uid: "51qQAD2b5RdWapSeaiPs3Ti102t2",
+      //     }, {
+      //       name: "테스트 유저 1",
+      //       uid: "SXhPtPjryrQunIV5D18Oay9AEBH3",
+      //     }], 
+      //     recentActive: currentDate,
+      //     chat: {
+      //       "1": {
+      //         content: "유저 1 메시지 1",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "2": {
+      //         content: "유저 1 메시지 2",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "3": {
+      //         content: "유저 2 메시지 1",
+      //         time: currentDate, author: "51qQAD2b5RdWapSeaiPs3Ti102t2", isRead: true, isDeleted: false,
+      //       },
+      //       "4": {
+      //         content: "유저 1 메시지 3",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "5": {
+      //         content: "유저 2 메시지 2",
+      //         time: currentDate, author: "51qQAD2b5RdWapSeaiPs3Ti102t2", isRead: true, isDeleted: false,
+      //       },
+      //       "6": {
+      //         content: "유저 1 메시지 4",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "7": {
+      //         content: "유저 1 메시지 5",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "8": {
+      //         content: "유저 2 메시지 3",
+      //         time: currentDate, author: "51qQAD2b5RdWapSeaiPs3Ti102t2", isRead: true, isDeleted: false,
+      //       },
+      //       "9": {
+      //         content: "유저 2 메시지 4",
+      //         time: currentDate, author: "51qQAD2b5RdWapSeaiPs3Ti102t2", isRead: true, isDeleted: false,
+      //       },
+      //       "10": {
+      //         content: "유저 2 메시지 5",
+      //         time: currentDate, author: "51qQAD2b5RdWapSeaiPs3Ti102t2", isRead: true, isDeleted: false,
+      //       },
+      //       "11": {
+      //         content: "유저 1 메시지 6",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //       "12": {
+      //         content: "유저 1 메시지 7",
+      //         time: currentDate, author: "SXhPtPjryrQunIV5D18Oay9AEBH3", isRead: true, isDeleted: false,
+      //       },
+      //     }
+        // }
+      // }
+    });
+  }
 </script>
 
-<button on:click={uploadDataToDb}></button>
+<button on:click={uploadDataToFirestore}></button>
+<button on:click={uploadDataToRealTimeDB}></button>
 
 <style>
   button {
