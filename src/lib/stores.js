@@ -1,4 +1,5 @@
 import { writable, readable } from "svelte/store";
+import { browser } from "$app/environment";
 
 export const idolAllInfo = {
   'BTS' : {
@@ -62,8 +63,44 @@ export const testPhotoCardImg = readable({
 
 export const pageRouteData = writable('');
 
+// const userSession = () => {sessionStorage.getItem('user')};
+// const {subscribe: userSubscribe, update: userUpdate, set: userSet}  = writable(userSession() || {});
+
+// export let user = {
+//   subscribe: userSubscribe,
+//   update: userUpdate,
+//   set: (param) => {
+//     userSet(param);
+//     sessionStorage.setItem('user', param);
+//   }
+// }
+
 export let user = writable({});
 export let userData = writable({});
 export let isLoggedIn = writable(false);
 export let openLoginDiv = writable(false);
 export const disabledEmailLogin = readable(true);
+
+
+const testNumSession = () => {
+  if (browser) {
+    sessionStorage.getItem('testNum')
+  }
+};
+
+const {subscribe: testNumSubscribe, update: testNumUpdate, set: testNumSet}  = writable(testNumSession() || 0);
+
+export let testNum = {
+  subscribe: testNumSubscribe,
+  update: testNumUpdate,
+  set: (param) => {
+    testNumSet(param);
+    console.log('set');
+    if (browser) {
+      console.log('browser');
+      sessionStorage.setItem('testNum', param);
+    } else {
+      console.log('no browser');
+    }
+  }
+}

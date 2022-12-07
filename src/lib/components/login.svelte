@@ -33,6 +33,7 @@
 
       try {
         const userDocSnap = await getDoc(docRef);
+        console.log(authResult.user.uid);
         userData.set(userDocSnap.data())
         console.log($userData);
       } catch(error) {
@@ -70,6 +71,7 @@
   });
 
 </script>
+
 <div id="dimPage">
   <div style={`position: relative;`}>
     <div id="loginWrap">

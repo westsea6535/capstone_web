@@ -1,6 +1,10 @@
 <script>
   import { isLoggedIn } from "$lib/stores";
   import BottomNav from "$lib/components/bottomNav.svelte";
+
+  export let data;
+  const { dbData } = data;
+  console.log(dbData ? dbData : "no db data");
 </script>
 
 <div id="wrap">
