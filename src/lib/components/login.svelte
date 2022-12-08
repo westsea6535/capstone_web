@@ -14,8 +14,6 @@
     try {
       const authResult = await signInWithPopup(auth, provider)
       console.log(authResult.user);
-      user.set(authResult.user);
-      isLoggedIn.set(true); 
       openLoginDiv.set(false);
 
       const docRef = doc(db, "user", authResult.user.uid);

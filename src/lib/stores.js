@@ -1,5 +1,7 @@
 import { writable, readable } from "svelte/store";
 import { browser } from "$app/environment";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import firebase from '$lib/firebase';
 
 export const idolAllInfo = {
   'BTS' : {
@@ -63,44 +65,19 @@ export const testPhotoCardImg = readable({
 
 export const pageRouteData = writable('');
 
-// const userSession = () => {sessionStorage.getItem('user')};
-// const {subscribe: userSubscribe, update: userUpdate, set: userSet}  = writable(userSession() || {});
+const auth = getAuth(firebase);
 
-// export let user = {
-//   subscribe: userSubscribe,
-//   update: userUpdate,
-//   set: (param) => {
-//     userSet(param);
-//     sessionStorage.setItem('user', param);
-//   }
-// }
-
-export let user = writable({});
+let userStore = writable({});
+let isLoggedInStore = writable(false);
+onAuthStateChanged(auth, (authUser) => {
+  if (authUser) {
+    userStore.set(authUser);
+    isLoggedInStore.set(true);
+  }
+})
+export let user = userStore;
 export let userData = writable({});
-export let isLoggedIn = writable(false);
+export let isLoggedIn = isLoggedInStore;
+
 export let openLoginDiv = writable(false);
 export const disabledEmailLogin = readable(true);
-
-
-const testNumSession = () => {
-  if (browser) {
-    sessionStorage.getItem('testNum')
-  }
-};
-
-const {subscribe: testNumSubscribe, update: testNumUpdate, set: testNumSet}  = writable(testNumSession() || 0);
-
-export let testNum = {
-  subscribe: testNumSubscribe,
-  update: testNumUpdate,
-  set: (param) => {
-    testNumSet(param);
-    console.log('set');
-    if (browser) {
-      console.log('browser');
-      sessionStorage.setItem('testNum', param);
-    } else {
-      console.log('no browser');
-    }
-  }
-}

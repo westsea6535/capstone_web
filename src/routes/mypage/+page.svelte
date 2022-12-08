@@ -21,7 +21,14 @@
 
 <div id="wrap">
   <div id="pageHeader">
-    <div id="title">마이 페이지</div>
+    <div id="title"
+      on:click={() => {
+        onAuthStateChanged(auth, (authUser) => {
+          console.log("authUser");
+          console.log(authUser);
+          console.log($userData);
+        })
+      }}>마이 페이지</div>
   </div>
   <div id="pageMain">
     <div id="userInfo">
@@ -37,7 +44,10 @@
             로그인 되었습니다.
           </div>
           <div id="logOutbtn"
-            on:click={() => signOut(auth)}>로그아웃</div>
+            on:click={() => {
+              signOut(auth);
+              isLoggedIn.set(false);
+            }}>로그아웃</div>
         {/if}
       </div>
     </div>

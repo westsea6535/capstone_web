@@ -1,33 +1,56 @@
 <script>
+  import firebase from '$lib/firebase';
   import { isLoggedIn } from "$lib/stores";
+  import { onAuthStateChanged, signOut } from 'firebase/auth';
+  import { auth, provider } from '$lib/firebaseAuth';
+  import { getDatabase, ref, onValue } from 'firebase/database';
+  import { onMount } from "svelte";
+
+  import ChatTitle from "$lib/components/chat/chatTitle.svelte";
   import BottomNav from "$lib/components/bottomNav.svelte";
 
-  export let data;
-  const { dbData } = data;
-  console.log(dbData ? dbData : "no db data");
+  const db = getDatabase(firebase);
+
+  let dbData;  
+  onMount(() => {
+    onAuthStateChanged(auth, (authUser) => {
+      console.log("authUser");
+      console.log(authUser);
+      if (authUser) {
+        const userUid = authUser.uid;
+        const dbRef = ref(db, `user/${userUid}`);
+        console.log("onValue");
+        onValue(dbRef, (snapshot) => {
+        dbData = snapshot.val();
+        console.log(dbData);
+        console.log(dbData.roomList[1].recentActive);
+        console.log(typeof(dbData.roomList[1].recentActive));
+        })
+      }
+    })
+  })
+
 </script>
 
 <div id="wrap">
   <div id="chatHeader" 
     on:click={() => {
-      //test part
-      if ($isLoggedIn) {
-        isLoggedIn.set(false);
-      } else {
-        isLoggedIn.set(true);
-      }
+      onAuthStateChanged(auth, (authUser) => {
+        console.log("authUser");
+        console.log(authUser);
+        console.log(dbData);
+        console.log(typeof(dbData.roomList));
+      })
     }}>
   </div>
 
   {#if $isLoggedIn}
     <div id="chatBody">
-      {#each Array(20) as _, i}
-        <a href={`/chat/${i}`} class="chatLink">
-          <div class="chatTitle">
-            {i}
-          </div>
-        </a>
-      {/each}
+      {#if dbData}
+        {#each Object.entries(dbData?.roomList) as [id, roomInfo]}
+          <ChatTitle id={id} roomInfo={roomInfo} />
+        {/each}
+      {/if}
     </div>
   {:else}
     <div id="noLoginChatBody">
@@ -57,12 +80,7 @@
     display: flex;
     flex-direction: column;
   }
-  .chatLink {
-    border-top: 2px solid #cdcdcd;
-    border-bottom: 2px solid #cdcdcd;
-    height: 50px;
-    background-color: white;
-  }
+
   #noLoginChatBody {
     height: 100%;
     display: flex;

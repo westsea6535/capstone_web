@@ -1,5 +1,5 @@
-export const load = () => {
+export const load = ({ params }) => {
   return {
-    chatRoomID : 0,
+    chatRoomID : params.chatRoomID,
   }
 }
