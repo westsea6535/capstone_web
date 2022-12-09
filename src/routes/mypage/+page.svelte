@@ -13,6 +13,7 @@
     userData = JSON.parse(localStorage.getItem('userData'));
   }
 
+  let openIdolSelectDiv = false;
   const testGoodsInfo = {
     user: "testUser1",
     moreInfo: "no moreInfo",
@@ -74,7 +75,10 @@
               </div> 
             {/each}
           {:else}
-            <div id="noUserLike">
+            <div id="noUserLike"
+              on:click={() => {
+                openIdolSelectDiv = true;
+              }}>
               즐겨찾기한 아이돌이 없습니다. 클릭하면 설정으로 이동합니다.
             </div>
           {/if}
@@ -107,7 +111,7 @@
       {:else}
         <div id="userGoodsMain">
           {#if userData.userLikeList}
-            {#each userData.userLikeList as userLikeGoods}
+            {#each userData?.userLikeList as userLikeGoods}
               <SingleGoods goodsData={userLikeGoods} goodsFetched={false}/> 
             {/each}
           {/if}
@@ -118,6 +122,15 @@
   <BottomNav />
   {#if $openLoginDiv}
     <Login />
+  {/if}
+  {#if openIdolSelectDiv}
+    <div id="idolSelectWrap"
+      on:click={() => {
+        openIdolSelectDiv = false;
+      }}>
+      아이돌 찾기 
+
+    </div>
   {/if}
 
 </div>
@@ -194,6 +207,19 @@
     column-gap: 3px;
     border: 1px solid black;
     box-sizing: border-box;
+  }
+  #idolSelectWrap {
+    width: 50vw;
+    height: 50vh;
+    position: fixed;
+    top: 25vh;
+    left: 25vw;
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 30px;
+    box-sizing: border-box;
+
+    background-color: white;
   }
 
 </style>

@@ -37,10 +37,10 @@
 
 <div id="wrap">
   <div id="pageHeader">
-    <div class="goBackBtn"
+    <button class="goBackBtn"
       on:click={() => {
         window.history.go(-1);
-      }}></div>
+      }}>뒤로가기</button>
   </div>
   <div id="pageBody">
     {#if chatData?.chat}

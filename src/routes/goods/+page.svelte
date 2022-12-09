@@ -2,9 +2,7 @@
   import { selectedGoodsInfo } from '$lib/stores';
   import GoodsCard from '$lib/components/goods/goodsCard.svelte';
   import { getDatabase, ref, onValue, push, child, serverTimestamp, update, get } from 'firebase/database';
-  import { auth, provider } from '$lib/firebaseAuth';
   import firebase from '$lib/firebase';
-  import { onAuthStateChanged, signOut } from 'firebase/auth';
   import { goto } from '$app/navigation';
   import { arrayUnion, updateDoc, doc, arrayRemove, getFirestore } from 'firebase/firestore';
 

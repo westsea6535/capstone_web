@@ -44,7 +44,7 @@
     console.log(uploadDateDate);
   }
 
-  const get = (date) => {
+  const get = () => {
     const currentDate = new Date();
     if (uploadDateDate) {
       return `${uploadDateDate.getHours()}시 ${uploadDateDate.getMinutes()}분`;
