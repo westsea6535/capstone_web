@@ -1,19 +1,24 @@
 <script>
   import BottomNav from '$lib/components/bottomNav.svelte';
   import Login from '$lib/components/login.svelte';
-  import { isLoggedIn, openLoginDiv, user, userData } from '$lib/stores';
+  import { isLoggedIn, openLoginDiv, user } from '$lib/stores';
   import { onAuthStateChanged, signOut } from 'firebase/auth';
   import { auth, provider } from '$lib/firebaseAuth';
   import SingleGoods from '$lib/components/singleGoods.svelte';
+  import { serverTimestamp } from 'firebase/firestore';
 
   let currentUserGoodsSelect = "upload";
+  let userData;
+  if (typeof window !== 'undefined') {
+    userData = JSON.parse(localStorage.getItem('userData'));
+  }
 
   const testGoodsInfo = {
     user: "testUser1",
     moreInfo: "no moreInfo",
     onSell: true,
     title: "test Title 1",
-    uploadDate: new Date(),
+    uploadDate: serverTimestamp(),
     imgUrl: null,
     isTestData: true,
   }
@@ -23,10 +28,10 @@
   <div id="pageHeader">
     <div id="title"
       on:click={() => {
+        console.log(localStorage.getItem('userData'));
         onAuthStateChanged(auth, (authUser) => {
           console.log("authUser");
           console.log(authUser);
-          console.log($userData);
         })
       }}>마이 페이지</div>
   </div>
@@ -61,8 +66,9 @@
             로그인하여 즐겨찾기 할 아이돌을 선택하세요.
           </div>
         {:else}
-          {#if $userData.userLikeList}
-            {#each $userData.userLikeList as userLike}
+          <!-- {#if userData.userLikeList} -->
+          {#if false}
+            {#each userData.userLikeList as userLike}
               <div class="userLikeImg">
 
               </div> 
@@ -100,9 +106,11 @@
         </div>
       {:else}
         <div id="userGoodsMain">
-          {#each Array(7) as _}
-            <SingleGoods goodsData={testGoodsInfo}/> 
-          {/each}
+          {#if userData.userLikeList}
+            {#each userData.userLikeList as userLikeGoods}
+              <SingleGoods goodsData={userLikeGoods} goodsFetched={false}/> 
+            {/each}
+          {/if}
         </div>
       {/if}
     </div>

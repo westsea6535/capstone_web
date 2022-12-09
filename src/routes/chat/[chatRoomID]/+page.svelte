@@ -20,6 +20,7 @@
         const dbRef = ref(db, `room/${chatRoomID}`);
         onValue(dbRef, (snapshot) => {
           chatData = snapshot.val();
+          console.log(chatData);
         })
       }
     })
@@ -42,12 +43,10 @@
       }}></div>
   </div>
   <div id="pageBody">
-    {#if chatData}
+    {#if chatData?.chat}
       {#each Object.entries(chatData.chat) as [chatID, chatInfo], chatIndex}
-        {#if chatIndex !== 0}
-          <div class={`chat ${userUid === chatInfo.author ? "myChat" : "oponentChat"}`}
-            on:click={() => { console.log(chatInfo);console.log(chatData.chat);}}>{chatInfo.content}</div>
-        {/if}
+        <div class={`chat ${userUid === chatInfo.author ? "myChat" : "oponentChat"}`}
+          on:click={() => { console.log(chatInfo);console.log(chatData.chat);}}>{chatInfo.content}</div>
       {/each}
     {/if}
   </div>

@@ -1,11 +1,59 @@
 <script>
   import { selectedGoodsInfo } from '$lib/stores';
   import GoodsCard from '$lib/components/goods/goodsCard.svelte';
+  import { getDatabase, ref, onValue, push, child, serverTimestamp, update, get } from 'firebase/database';
+  import { auth, provider } from '$lib/firebaseAuth';
+  import firebase from '$lib/firebase';
+  import { onAuthStateChanged, signOut } from 'firebase/auth';
+  import { goto } from '$app/navigation';
+  import { arrayUnion, updateDoc, doc, arrayRemove, getFirestore } from 'firebase/firestore';
 
   export let data;
   console.log(data);
   const { goodsCardList } = data;
+  const db = getDatabase(firebase);
+  const firestoredb = getFirestore(firebase);
+  const userData = JSON.parse(localStorage.getItem('userData'));
 
+  let isLiked =  userData.userLikeList ? userData.userLikeList.includes($selectedGoodsInfo.goodsId) : false;
+
+  const onLikeBtnClick = () => {
+    console.log(isLiked);
+    console.log(userData);
+    const uploaderUid = $selectedGoodsInfo.uploaderUID;
+    const userUid = userData.uid;
+    if (uploaderUid === userUid) {
+      return;
+    }
+    console.log('flag1');
+    const docRef = doc(firestoredb, `user`, userUid);
+    console.log('flag2');
+    const likeToggle = async () => {
+      console.log('flag3');
+      if (!userData.userLikeList || !userData.userLikeList?.includes($selectedGoodsInfo.goodsId)) {  
+        console.log('no list');
+        await updateDoc(docRef, {
+          userLikeList: arrayUnion($selectedGoodsInfo.goodsId),
+        })
+        if (userData.userLikeList) {
+          userData.userLikeList = [...userData.userLikeList, $selectedGoodsInfo.goodsId];
+        } else {
+          userData.userLikeList = [$selectedGoodsInfo.goodsId];
+        }
+        isLiked = true;
+      } else {
+        await updateDoc(docRef, {
+          userLikeList: arrayRemove($selectedGoodsInfo.goodsId),
+        })
+        const goodsIndex = userData.userLikeList?.indexOf($selectedGoodsInfo.goodsId);
+        userData.userLikeList?.splice(goodsIndex, 1);
+        isLiked = false;
+      }
+      localStorage.setItem('userData', JSON.stringify(userData));
+      console.log(userData);
+    }
+    likeToggle();
+  }
 </script>
 
 <div id="wrap">
@@ -43,8 +91,96 @@
         <div id="sellerMoreInfo">></div>
       </div>
       <div id="btnWrap">
-        <div id="likeBtn">like</div>
-        <div id="chatBtn">chat</div>
+        {#if isLiked}
+          <div id="likeBtn" class='liked'
+            on:click={() => {
+              console.log(isLiked);
+              onLikeBtnClick();
+              console.log('liekd div');
+              }}>like</div>
+        {:else}
+          <div id="likeBtn"
+            on:click={onLikeBtnClick}>like</div>
+        {/if}
+        <div id="chatBtn"
+          on:click={() => {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const uploaderUid = $selectedGoodsInfo.uploaderUID;
+            const userUid = userData.uid;
+            if (uploaderUid === userUid) {
+              return;
+            }
+
+            let isChatWith = [];
+            const chatIsExist = async () => {
+              const dbRef = ref(db, `user/${userUid}/isChatWith`);
+              isChatWith = await get(dbRef);
+            }
+            chatIsExist()
+              .then(() => {
+                console.log(isChatWith.val());
+                let chatExist = false;
+                let oponentChatData;
+
+                if (isChatWith.val()) {
+                  const isChatWithArr = Object.entries(isChatWith.val());
+                  for (let j = 0; j < isChatWithArr.length; j++) {
+                    console.log(isChatWithArr[j]);
+                    if (isChatWithArr[j][1].uid === uploaderUid) {
+                      oponentChatData = isChatWithArr[j][1];
+                      console.log(isChatWithArr[j]);
+                      console.log(oponentChatData);
+                      chatExist = true;
+                    }
+                  }
+                }
+
+                if (chatExist) {
+                  goto(`chat/${oponentChatData.roomId}`);
+                } else {
+                  const roomPushKey = push(child(ref(db), `room`)).key;
+
+                  const makeRoom = () => {
+                    const roomData = {
+                      chat: [],
+                      recentActive: serverTimestamp(),
+                      user: [
+                        {name: userData.userName, uid: userUid},
+                        {name: $selectedGoodsInfo.uploaderName, uid: uploaderUid},
+                      ]
+                    }
+                    const userRoomData = {
+                      oponentName: $selectedGoodsInfo.uploaderName,
+                      oponentProfileImage: '',
+                      oponentUID: uploaderUid,
+                      recentActive: serverTimestamp(),
+                      recentMessage: "",
+                    }
+                    const oponentRoomData = {
+                      oponentName: userData.userName,
+                      oponentProfileImage: '',
+                      oponentUID: userUid,
+                      recentActive: serverTimestamp(),
+                      recentMessage: "",
+                    }
+                    const userChatPushKey = push(child(ref(db), `user/${userUid}/isChatWith`)).key;
+                    const oponentChatPushKey = push(child(ref(db), `user/${uploaderUid}/isChatWith`)).key;
+
+                    const updates = {};
+                    updates[`/room/${roomPushKey}`] = roomData;
+                    updates[`/user/${userUid}/isChatWith/${userChatPushKey}`] = {name: $selectedGoodsInfo.uploaderName, uid: uploaderUid, roomId: roomPushKey};
+                    updates[`/user/${uploaderUid}/isChatWith/${oponentChatPushKey}`] = {name: userData.userName, uid: userUid, roomId: roomPushKey};
+                    updates[`/user/${userUid}/roomList/${roomPushKey}`] = userRoomData;
+                    updates[`/user/${uploaderUid}/roomList/${roomPushKey}`] = oponentRoomData;
+                    return update(ref(db), updates);
+                  }
+                  makeRoom();
+                  // goto(`chat/${roomPushKey}`);
+                }
+              });
+
+            console.log(userUid);
+          }}>chat</div>
       </div>
       <div id="goodsContent">
         {$selectedGoodsInfo.moreInfo ? $selectedGoodsInfo.moreInfo : "추가 정보 없음"}
@@ -163,11 +299,15 @@
     box-sizing: border-box;
     padding: 8px 0 5px;
   }
+  .liked {
+    background-color: antiquewhite;
+  }
   #goodsContent {
     font-size: 14px;
     color: #333;
     position: relative;
     min-height: 30vh;
+    word-break: break-all;
   }
   #goodsContent::before {
     content: '';

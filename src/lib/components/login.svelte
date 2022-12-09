@@ -34,6 +34,7 @@
         console.log(authResult.user.uid);
         userData.set(userDocSnap.data())
         console.log($userData);
+        localStorage.setItem('userData', JSON.stringify(userDocSnap.data()));
       } catch(error) {
         console.log(error);
       }

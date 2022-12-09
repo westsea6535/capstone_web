@@ -75,6 +75,7 @@ onAuthStateChanged(auth, (authUser) => {
     isLoggedInStore.set(true);
   }
 })
+
 export let user = userStore;
 export let userData = writable({});
 export let isLoggedIn = isLoggedInStore;

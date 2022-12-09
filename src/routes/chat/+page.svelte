@@ -21,10 +21,8 @@
         const dbRef = ref(db, `user/${userUid}`);
         console.log("onValue");
         onValue(dbRef, (snapshot) => {
-        dbData = snapshot.val();
-        console.log(dbData);
-        console.log(dbData.roomList[1].recentActive);
-        console.log(typeof(dbData.roomList[1].recentActive));
+          dbData = snapshot.val();
+          console.log(dbData);
         })
       }
     })

@@ -1,6 +1,7 @@
 <script>
   export let roomInfo;
   export let id;
+  console.log(id);
 
   const displayDate = (date) => {
     const dbDate = new Date(date);

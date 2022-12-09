@@ -1,8 +1,8 @@
 <script>
-  import { openedSelectComponent, selectedCardList } from '$lib/stores';
+  import { openedSelectComponent, selectedCardList, user } from '$lib/stores';
   import BuyComponent from "$lib/components/upload/buyComponent.svelte";
   import firebase from "$lib/firebase";
-  import { getFirestore, writeBatch, doc } from 'firebase/firestore';
+  import { getFirestore, writeBatch, doc, serverTimestamp } from 'firebase/firestore';
   import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import { goto } from '$app/navigation';
 
@@ -53,14 +53,16 @@
           console.log(imgUrlList);
 
           const docRef = doc(firestore, 'goodsList', docName);
+          const userData = JSON.parse(localStorage.getItem('userData'));
 
           batch.set(docRef, {
-            id: docName,
+            goodsId: docName,
             title: bindTitle,
             moreInfo: bindEtcText,
             onSell: true,
-            user: '관리자',
-            uploadDate: new Date(),
+            uploaderName: userData.userName,
+            uploaderUID: userData.uid,
+            uploadDate: serverTimestamp(),
             imgUrl: imgUrlList,
           })
 

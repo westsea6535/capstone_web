@@ -1,43 +1,55 @@
 <script>
   import { selectedGoodsInfo } from '$lib/stores';
-  
+  import firebase from '$lib/firebase';
+  import { getFirestore, query, collection, orderBy, limit, QuerySnapshot, doc, getDoc,  } from 'firebase/firestore';
+  const db = getFirestore(firebase);
+
   export let goodsData;
-  let {
-    user,
-    moreInfo,
-    onSell,
-    title,
-    uploadDate,
-    imgUrl,
-    isTestData,
-  } = goodsData;
+  export let goodsFetched = true;
+  let user, moreInfo, onSell, title, uploadDate, imgUrl, isTestData, goodsId;
+  let uploadDateDate;
 
-  const uploadDateDate = new Date(uploadDate.seconds * 1000);
-  const currentDate = new Date();
-  const dateDiff = currentDate - uploadDateDate;
+  if (!goodsFetched) {
+    const getSingleGoodsData = async () => {
+      goodsId = goodsData;
+      console.log(goodsId);
+      const docRef = doc(db, 'goodsList', goodsId);
+      const docSnap = await getDoc(docRef);
+      console.log(docSnap.data());
+      user = docSnap.data().uploaderName;
+      moreInfo = docSnap.data().moreInfo;
+      onSell = docSnap.data().onSell;
+      title = docSnap.data().title;
+      uploadDate = docSnap.data().uploadDate;
+      imgUrl = docSnap.data().imgUrl;
+    }
+    getSingleGoodsData()
+      .then(() => {
+        uploadDateDate = new Date(uploadDate.seconds * 1000);
+        console.log(uploadDate);
+        console.log(uploadDateDate);
+        console.log(imgUrl);
+      });
+  } else {
+    user = goodsData.user;
+    moreInfo = goodsData.moreInfo;
+    onSell = goodsData.onSell;
+    title = goodsData.title;
+    uploadDate = goodsData.uploadDate;
+    imgUrl = goodsData.imgUrl;
+    isTestData = goodsData.isTestData;
 
-  console.log(goodsData);
-  const divisors = {
-    days: 86400000,
-    hours: 3600000,
-    minutes: 60000,
-    seconds: 1000,
+    uploadDateDate = new Date(uploadDate.seconds * 1000);
+    console.log(uploadDate);
+    console.log(uploadDateDate);
   }
+
   const get = (date) => {
-    let insideDate = date;
-    const dateDays = Math.floor(insideDate / divisors.days);
-    insideDate = insideDate - divisors.days * dateDays;
-    const dateHours = Math.floor(insideDate / divisors.hours);
-    insideDate = insideDate - divisors.hours * dateHours;
-    const dateMinutes = Math.floor(insideDate / divisors.minutes);
-    insideDate = insideDate - divisors.minutes * dateMinutes;
-    const dateSeconds = Math.floor(insideDate / divisors.seconds);
-    return `${dateDays ? `${dateDays}일 전` 
-      : dateHours ? `${dateHours}시간 전`
-      : dateMinutes ? `${dateMinutes}분 전`
-      : `${dateSeconds}초 전`}`
+    const currentDate = new Date();
+    if (uploadDateDate) {
+      return `${uploadDateDate.getHours()}시 ${uploadDateDate.getMinutes()}분`;
+    }
   }
-  // console.log(get(dateDiff));
 </script>
 
 <div id="goodsDataWrap">
@@ -47,7 +59,11 @@
     }}>
     <div id="goodsImgWrap">
       <div class="beforeImgRender"></div>
-      <img src={goodsData.imgUrl?.[0]} alt="loading...">
+      {#if imgUrl}
+        <img src={imgUrl?.[0]} alt="loading...">
+      {:else}
+        <div />
+      {/if}
     </div>
     <div id="goodsInfo">
       <div id="goodsTitle">
@@ -56,9 +72,15 @@
       {#if isTestData} 
         <div id="goodsDate">1일 전</div>
       {:else}
-        <div id="goodsDate">
-          {get(dateDiff)}
-        </div>
+        {#if uploadDateDate}
+          <div id="goodsDate">
+            {get()}
+          </div>
+        {:else}
+          <div id="goodsDate">
+
+          </div>
+        {/if}
       {/if}
     </div>
   </a>
