@@ -13,13 +13,17 @@
   const firestoredb = getFirestore(firebase);
   const userData = JSON.parse(localStorage.getItem('userData'));
 
-  let isLiked =  userData.userLikeList ? userData.userLikeList.includes($selectedGoodsInfo.goodsId) : false;
+  let isLiked =  userData?.userLikeList ? userData?.userLikeList.includes($selectedGoodsInfo.goodsId) : false;
 
   const onLikeBtnClick = () => {
     console.log(isLiked);
     console.log(userData);
+
     const uploaderUid = $selectedGoodsInfo.uploaderUID;
-    const userUid = userData.uid;
+    if(!userData) {
+      return;
+    }
+    const userUid = userData?.uid;
     if (uploaderUid === userUid) {
       return;
     }
@@ -52,6 +56,11 @@
     }
     likeToggle();
   }
+
+  const printDate = (target) => {
+    const date = new Date(target);
+    return`${date.getMonth()}월 ${date.getDate()}일 ${date.getHours()}시 ${date.getMinutes()}분`;
+  }
 </script>
 
 <div id="wrap">
@@ -72,7 +81,7 @@
         {$selectedGoodsInfo.title}
       </div>
       <div id="goodsUploadTime">
-        {`1월 1일 1시 1분`}
+        {printDate($selectedGoodsInfo.uploadDate.seconds * 1000)}
       </div>
       <div id="goodsCondition">
         상품 상태: 미개봉
@@ -83,7 +92,7 @@
       <div id="sellerDiv">
         <div id="sellerProfileImg"></div>
         <div id="sellerInfo">
-          <div id="sellerName">{$selectedGoodsInfo.user}</div>
+          <div id="sellerName">{$selectedGoodsInfo.uploaderName}</div>
           <div id="sellerGrade">평점: 5.0</div>
         </div>
         <div id="sellerMoreInfo">></div>
@@ -102,7 +111,9 @@
         {/if}
         <div id="chatBtn"
           on:click={() => {
-            const userData = JSON.parse(localStorage.getItem('userData'));
+            if(!userData) {
+              return;
+            }
             const uploaderUid = $selectedGoodsInfo.uploaderUID;
             const userUid = userData.uid;
             if (uploaderUid === userUid) {
