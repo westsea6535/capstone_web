@@ -110,7 +110,7 @@
         </div>
       {:else}
         <div id="userGoodsMain">
-          {#if userData.userLikeList}
+          {#if userData?.userLikeList}
             {#each userData?.userLikeList as userLikeGoods}
               <SingleGoods goodsData={userLikeGoods} goodsFetched={false}/> 
             {/each}
@@ -123,15 +123,14 @@
   {#if $openLoginDiv}
     <Login />
   {/if}
-  {#if openIdolSelectDiv}
+  <!-- {#if openIdolSelectDiv}
     <div id="idolSelectWrap"
       on:click={() => {
         openIdolSelectDiv = false;
       }}>
       아이돌 찾기 
-
     </div>
-  {/if}
+  {/if} -->
 
 </div>
 

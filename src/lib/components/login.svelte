@@ -78,7 +78,10 @@
         <div id="loginTitle">
           로그인 하기
         </div>
-        <button id="removeDivBtn" on:click={() => openLoginDiv.set(false)}>&#10005;</button>
+        <div id="removeDivBtn" on:click={() => {
+          console.log($openLoginDiv);
+          openLoginDiv.set(false);
+          }}>&#10005;</div>
       </div>
 
       <div id="socialLogin" class="fontDefault">
